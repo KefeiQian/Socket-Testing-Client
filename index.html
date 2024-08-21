@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Socket Test</title>
+  </head>
+  <body>
+    waiting for server response:
+    <script type="module">
+      function log(data) {
+        console.log(data);
+        const text = document.createTextNode(data.toString());
+
+        document.body.appendChild(text);
+
+        document.body.appendChild(document.createElement("br"));
+      }
+
+      import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
+
+      const socket = io("http://localhost:16354");
+
+      socket.on("connect", () => {
+        log("Connected to the server");
+
+        // Emit an event with data to the server
+        socket.emit("test", { message: "Hello, server!" });
+
+        socket.on("log", (data) => {
+          log(data);
+        });
+      });
+
+      socket.on("disconnect", () => {
+        log("Disconnected from the server");
+      });
+    </script>
+  </body>
+</html>
